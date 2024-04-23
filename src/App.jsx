@@ -70,7 +70,7 @@ const Scene = () => {
   return (
     <div id="canv" >
       <div style={underLap}>
-        <br /><br /><br /><br /><br /><br />
+        <br /><br /><br /><br /><br /><br /> <p>TEST</p>
       </div>
       <Canvas className="canv" camera={{ position: [7, 3, 1.5] } }>
         <ambientLight intensity={0.5} />
