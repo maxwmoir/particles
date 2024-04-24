@@ -72,7 +72,7 @@ const Scene = () => {
       </div>
       <Canvas className="canv" camera={{ position: [7, 3, 1.5] } }>
         <ambientLight intensity={0.5} />
-        <CustomGeometryParticles count={1000} shape="box"/>
+        <CustomGeometryParticles count={100000} shape="sphere"/>
         <OrbitControls autoRotate autoRotateSpeed={1}/>
       </Canvas>
       <br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
