@@ -68,16 +68,12 @@ const Scene = () => {
 
   return (
     <div id="canv" >
-      <div style={underLap}>
-      </div>
       <Canvas className="canv" camera={{ position: [7, 3, 1.5] } }>
         <ambientLight intensity={0.5} />
         <CustomGeometryParticles count={100000} shape="sphere"/>
         <OrbitControls autoRotate autoRotateSpeed={1}/>
       </Canvas>
-      <br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
 
-      <p>test</p>
     </div>
 
   );
