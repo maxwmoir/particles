@@ -16,12 +16,11 @@ const CustomGeometryParticles = (props) => {
   // Generate our positions attributes array
   const particlesPosition = useMemo(() => {
     const positions = new Float32Array(count * 3);
-    const mousecoords = useRef((0,0));
 
     if (shape === "box") {
       for (let i = 0; i < count; i++) {
         let x = (Math.random() - 0.5) * 2;
-        let y = (Math.random() - 0.5) * 2 * x;
+        let y = (Math.random() - 0.5) * 2;
         let z = (Math.random() - 0.5) * 2;
 
         positions.set([x, y, z], i * 3);
@@ -70,11 +69,10 @@ const Scene = () => {
   return (
     <div id="canv" >
       <div style={underLap}>
-        <br /><br /><br /><br /><br /><br /> <p>TEST</p>
       </div>
       <Canvas className="canv" camera={{ position: [7, 3, 1.5] } }>
         <ambientLight intensity={0.5} />
-        <CustomGeometryParticles count={100000} shape="sphere"/>
+        <CustomGeometryParticles count={1000} shape="box"/>
         <OrbitControls autoRotate autoRotateSpeed={1}/>
       </Canvas>
       <br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
