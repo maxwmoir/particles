@@ -6,12 +6,7 @@ import "./App.css"
 
 const CustomGeometryParticles = (props) => {
   const { count, shape } = props;
-
-
-
-  // This reference gives us direct access to our points
   const points = useRef();
-
 
   // Generate our positions attributes array
   const particlesPosition = useMemo(() => {
@@ -26,21 +21,18 @@ const CustomGeometryParticles = (props) => {
         positions.set([x, y, z], i * 3);
       }
     }
-
-    if (shape === "sphere") {
-      const distance = 1;
-     
-      for (let i = 0; i < count; i++) {
-        const theta = THREE.MathUtils.randFloatSpread(360); 
-        const phi = THREE.MathUtils.randFloatSpread(360); 
-
-        let x = distance * Math.sin(theta) * Math.cos(phi) * 10;
-        let z = distance * Math.cos(theta) *10;
-        let y = (Math.cos(Math.sqrt((10*x)**2 + (10*z)**2)) - Math.sqrt((10*x)**2 + (10*z)**2) / 5)/ 5 + 2;
-
-        positions.set([x, y, z], i * 3);
-      }
-    }
+    // const uniforms = useMemo(() => ({
+    //   uTime: {
+    //     value: 0.0
+    //   },
+    //   // Add any other attributes here
+    // }), [])
+  
+  
+    useFrame((state) => {
+      const { clock } = state;
+      points.current.material.uniforms.uTime.value = clock.elapsedTime;
+    });  
 
     return positions;
   }, [count, shape]);
@@ -55,7 +47,13 @@ const CustomGeometryParticles = (props) => {
           itemSize={3}
         />
       </bufferGeometry>
-      <pointsMaterial size={0.015} color="#5786F5" sizeAttenuation depthWrite={false} />
+      {/* <pointsMaterial size={0.015} color="#5786F5" sizeAttenuation depthWrite={false} /> */}
+      <shaderMaterial
+        depthWrite={false}
+        fragmentShader={fragmentShader}
+        vertexShader={vertexShader}
+        uniforms={uniforms}
+      />
     </points>
   );
 };
@@ -70,7 +68,7 @@ const Scene = () => {
     <div id="canv" >
       <Canvas className="canv" camera={{ position: [7, 3, 1.5] } }>
         <ambientLight intensity={0.5} />
-        <CustomGeometryParticles count={100000} shape="sphere"/>
+        <CustomGeometryParticles count={1000} shape="box"/>
         <OrbitControls autoRotate autoRotateSpeed={1}/>
       </Canvas>
 
