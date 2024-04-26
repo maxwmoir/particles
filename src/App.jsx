@@ -45,6 +45,22 @@ const CustomGeometryParticles = (props) => {
     return positions;
   }, [count, shape]);
 
+  useFrame((state) => {
+    const { clock } = state;
+    
+    for (let i = 0; i < count; i++) {
+      const i3 = i * 3;
+
+
+      points.current.geometry.attributes.position.array[i3] += Math.sin(clock.elapsedTime + Math.random() * 10) * 0.01;
+      points.current.geometry.attributes.position.array[i3 + 1] += Math.cos(clock.elapsedTime + Math.random() * 10) * 0.01;
+      points.current.geometry.attributes.position.array[i3 + 2] += Math.sin(clock.elapsedTime + Math.random() * 10) * 0.01;
+    }
+
+    points.current.geometry.attributes.position.needsUpdate = true;
+  
+  });
+
   return (
     <points ref={points}>
       <bufferGeometry>
@@ -70,7 +86,7 @@ const Scene = () => {
     <div id="canv" >
       <Canvas className="canv" camera={{ position: [7, 3, 1.5] } }>
         <ambientLight intensity={0.5} />
-        <CustomGeometryParticles count={100000} shape="sphere"/>
+        <CustomGeometryParticles count={1000} shape="box"/>
         <OrbitControls autoRotate autoRotateSpeed={1}/>
       </Canvas>
 
