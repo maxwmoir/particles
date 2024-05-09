@@ -34,10 +34,10 @@ const CustomGeometryParticles = (props) => {
         const theta = THREE.MathUtils.randFloatSpread(360); 
         const phi = THREE.MathUtils.randFloatSpread(360); 
 
-        let x = distance * Math.sin(theta) * Math.cos(phi) * 10;
-        let z = distance * Math.cos(theta) *10;
-        let y = (Math.cos(Math.sqrt((10*x)**2 + (10*z)**2)) - Math.sqrt((10*x)**2 + (10*z)**2) / 5)/ 5 + 2;
-
+        let x = distance * Math.cos(theta) * 0.01; 
+        let z = distance * Math.cos(phi) * 0.01;
+        //let y = (Math.cos(Math.sqrt((10*x)**2 + (10*z)**2)) - Math.sqrt((10*x)**2 + (10*z)**2) / 5)/ 5 + 2;
+        let y = 0//-Math.sqrt((10*x)**2 + (10*z)**2)/50 + 2;
         positions.set([x, y, z], i * 3);
       }
     }
@@ -50,11 +50,14 @@ const CustomGeometryParticles = (props) => {
     
     for (let i = 0; i < count; i++) {
       const i3 = i * 3;
+      let x = points.current.geometry.attributes.position.array[i3]
+      let z = points.current.geometry.attributes.position.array[i3 + 2]
+      points.current.geometry.attributes.position.array[i3] *= 1.035 -  Math.sqrt((8*x)**2 + (8*z)**2) / 400
+      points.current.geometry.attributes.position.array[i3 + 2] *= 1.035 - Math.sqrt((8*x)**2 + (1*z)**2) / 400
 
-
-      points.current.geometry.attributes.position.array[i3] += Math.sin(clock.elapsedTime + Math.random() * 10) * 0.01;
-      points.current.geometry.attributes.position.array[i3 + 1] += Math.cos(clock.elapsedTime + Math.random() * 10) * 0.01;
-      points.current.geometry.attributes.position.array[i3 + 2] += Math.sin(clock.elapsedTime + Math.random() * 10) * 0.01;
+      points.current.geometry.attributes.position.array[i3 + 1] = (Math.cos(x) + Math.sin(z)) + Math.sin(clock.elapsedTime + x + z)
+      
+      //points.current.geometry.attributes.position.array[i3 + 1] += .003 * Math.sin(clock.elapsedTime + Math.exMath.sin(clock.elapsedTimep(x**2 + z**2))**2;
     }
 
     points.current.geometry.attributes.position.needsUpdate = true;
@@ -71,7 +74,7 @@ const CustomGeometryParticles = (props) => {
           itemSize={3}
         />
       </bufferGeometry>
-      <pointsMaterial size={0.015} color="#5786F5" sizeAttenuation depthWrite={false} />
+      <pointsMaterial size={0.015} color="#ff0000" sizeAttenuation depthWrite={false} />
     </points>
   );
 };
@@ -85,9 +88,9 @@ const Scene = () => {
   return (
     <div id="canv" >
       <Canvas className="canv" camera={{ position: [7, 3, 1.5] } }>
-        <ambientLight intensity={0.5} />
-        <CustomGeometryParticles count={1000} shape="box"/>
-        <OrbitControls autoRotate autoRotateSpeed={1}/>
+        <ambientLight intensity={0.5}/>
+        <CustomGeometryParticles count={200000} shape="sphere"/>
+        <OrbitControls autoRotate autoRotateSpeed={0}/>
       </Canvas>
 
     </div>
