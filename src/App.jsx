@@ -53,7 +53,7 @@ const CustomGeometryParticles = (props) => {
       let x = points.current.geometry.attributes.position.array[i3]
       let z = points.current.geometry.attributes.position.array[i3 + 2]
       points.current.geometry.attributes.position.array[i3] *= 1.035 -  Math.sqrt((8*x)**2 + (8*z)**2) / 400
-      points.current.geometry.attributes.position.array[i3 + 2] *= 1.035 - Math.sqrt((8*x)**2 + (1*z)**2) / 400
+      points.current.geometry.attributes.position.array[i3 + 2] *= 1.035 - Math.sqrt((8*x)**2 + (2*z)**2) / 400
 
       points.current.geometry.attributes.position.array[i3 + 1] = (Math.cos(x) + Math.sin(z)) + Math.sin(clock.elapsedTime + x + z)
       
