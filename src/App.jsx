@@ -1,14 +1,12 @@
-import { OrbitControls } from "@react-three/drei";
+import { Backdrop, OrbitControls } from "@react-three/drei";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { useMemo, useRef } from "react";
+import { useMemo, useRef, useState } from "react";
+import ReactDom from 'react-dom/client'
 import * as THREE from "three";
 import "./App.css"
 
 const CustomGeometryParticles = (props) => {
   const { count, shape } = props;
-
-
-
   // This reference gives us direct access to our points
   const points = useRef();
 
@@ -19,9 +17,9 @@ const CustomGeometryParticles = (props) => {
 
     if (shape === "box") {
       for (let i = 0; i < count; i++) {
-        let x = (Math.random() - 0.5) * 2;
-        let y = (Math.random() - 0.5) * 2;
-        let z = (Math.random() - 0.5) * 2;
+        let x = (Math.random() - 0.5) * 5;
+        let y = (Math.random() - 0.5) * 5;
+        let z = (Math.random() - 0.5) * 5;
 
         positions.set([x, y, z], i * 3);
       }
@@ -34,10 +32,10 @@ const CustomGeometryParticles = (props) => {
         const theta = THREE.MathUtils.randFloatSpread(360); 
         const phi = THREE.MathUtils.randFloatSpread(360); 
 
-        let x = distance * Math.cos(theta) ; 
+        let x = distance * Math.cos(theta) * Math.sin(phi); 
+        let y = distance * Math.sin(theta) * Math.sin(phi);
         let z = distance * Math.cos(phi) ;
-        //let y = (Math.cos(Math.sqrt((10*x)**2 + (10*z)**2)) - Math.sqrt((10*x)**2 + (10*z)**2) / 5)/ 5 + 2;
-        let y = 0//-Math.sqrt((10*x)**2 + (10*z)**2)/50 + 2;
+
         positions.set([x, y, z], i * 3);
       }
     }
@@ -53,13 +51,14 @@ const CustomGeometryParticles = (props) => {
       let x = points.current.geometry.attributes.position.array[i3]
       let z = points.current.geometry.attributes.position.array[i3 + 2]
       let y = points.current.geometry.attributes.position.array[i3 + 1]
-      
-       
+      let theta = Math.atan(y / x)
 
-      // points.current.geometry.attributes.position.array[i3] *= 1.035 -  Math.sqrt(x**2 + z**2) / 500
-      // points.current.geometry.attributes.position.array[i3 + 2] *= 1.035 - Math.sqrt(x**2 + z**2) / 500 
-      points.current.geometry.attributes.position.array[i3 + 1] = Math.sin(clock.elapsedTime + x + z) - 0.7*Math.sqrt(x**2 + z ** 2)
-      // points.current.geometry.attributes.position.array[i3 + 1] = .003 * Math.sin(clock.elapsedTime + Math.exMath.sin(clock.elapsedTimep(x**2 + z**2))**2)
+      points.current.geometry.attributes.position.array[i3] *= 1.035 -  Math.sqrt((8*x)**2 + (8*z)**2) / 1600
+      points.current.geometry.attributes.position.array[i3 + 2] *= 1.035 - Math.sqrt((8*x)**2 + (2*z)**2) / 1600
+      points.current.geometry.attributes.position.array[i3 + 1] = (Math.cos(x) + Math.sin(z)) + Math.sin(clock.elapsedTime + x + z)
+
+      
+
     }
 
     points.current.geometry.attributes.position.needsUpdate = true;
@@ -82,16 +81,33 @@ const CustomGeometryParticles = (props) => {
 };
 
 const Scene = () => {
-  const underLap = {
+  const overLap = {
     position: "fixed",
-    zIndex:-1
+    zIndex:+1
+  }
+
+  const [color, setColor] = useState("sphere");
+
+  function handleClick() {
+    if (color == "sphere") {
+      setColor("box");
+    } else {
+      setColor("sphere");
+    }
   }
 
   return (
     <div id="canv" >
+      <div style={overLap}>
+        <br /><br /><br /><br /><br /><br /><br /><br />
+        <button onClick={handleClick}>
+        Next
+      </button>
+    </div>
+
       <Canvas className="canv" camera={{ position: [7, 3, 1.5] } }>
         <ambientLight intensity={0.5}/>
-        <CustomGeometryParticles count={150000} shape="sphere"/>
+        <CustomGeometryParticles count={150000} shape={color}/>
         <OrbitControls autoRotate autoRotateSpeed={0}/>
       </Canvas>
 
