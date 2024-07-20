@@ -28,14 +28,14 @@ const CustomGeometryParticles = (props) => {
     }
 
     if (shape === "sphere") {
-      const distance = 1;
+      const distance = 20;
      
       for (let i = 0; i < count; i++) {
         const theta = THREE.MathUtils.randFloatSpread(360); 
         const phi = THREE.MathUtils.randFloatSpread(360); 
 
-        let x = distance * Math.cos(theta) * 0.01; 
-        let z = distance * Math.cos(phi) * 0.01;
+        let x = distance * Math.cos(theta) ; 
+        let z = distance * Math.cos(phi) ;
         //let y = (Math.cos(Math.sqrt((10*x)**2 + (10*z)**2)) - Math.sqrt((10*x)**2 + (10*z)**2) / 5)/ 5 + 2;
         let y = 0//-Math.sqrt((10*x)**2 + (10*z)**2)/50 + 2;
         positions.set([x, y, z], i * 3);
@@ -52,12 +52,14 @@ const CustomGeometryParticles = (props) => {
       const i3 = i * 3;
       let x = points.current.geometry.attributes.position.array[i3]
       let z = points.current.geometry.attributes.position.array[i3 + 2]
-      points.current.geometry.attributes.position.array[i3] *= 1.035 -  Math.sqrt((8*x)**2 + (8*z)**2) / 400
-      points.current.geometry.attributes.position.array[i3 + 2] *= 1.035 - Math.sqrt((8*x)**2 + (2*z)**2) / 400
-
-      points.current.geometry.attributes.position.array[i3 + 1] = (Math.cos(x) + Math.sin(z)) + Math.sin(clock.elapsedTime + x + z)
+      let y = points.current.geometry.attributes.position.array[i3 + 1]
       
-      //points.current.geometry.attributes.position.array[i3 + 1] += .003 * Math.sin(clock.elapsedTime + Math.exMath.sin(clock.elapsedTimep(x**2 + z**2))**2;
+       
+
+      // points.current.geometry.attributes.position.array[i3] *= 1.035 -  Math.sqrt(x**2 + z**2) / 500
+      // points.current.geometry.attributes.position.array[i3 + 2] *= 1.035 - Math.sqrt(x**2 + z**2) / 500 
+      points.current.geometry.attributes.position.array[i3 + 1] = Math.sin(clock.elapsedTime + x + z) - 0.7*Math.sqrt(x**2 + z ** 2)
+      // points.current.geometry.attributes.position.array[i3 + 1] = .003 * Math.sin(clock.elapsedTime + Math.exMath.sin(clock.elapsedTimep(x**2 + z**2))**2)
     }
 
     points.current.geometry.attributes.position.needsUpdate = true;
@@ -74,7 +76,7 @@ const CustomGeometryParticles = (props) => {
           itemSize={3}
         />
       </bufferGeometry>
-      <pointsMaterial size={0.015} color="#ff0000" sizeAttenuation depthWrite={false} />
+      <pointsMaterial size={0.015} color="#00f742" sizeAttenuation depthWrite={false} />
     </points>
   );
 };
@@ -89,7 +91,7 @@ const Scene = () => {
     <div id="canv" >
       <Canvas className="canv" camera={{ position: [7, 3, 1.5] } }>
         <ambientLight intensity={0.5}/>
-        <CustomGeometryParticles count={200000} shape="sphere"/>
+        <CustomGeometryParticles count={150000} shape="sphere"/>
         <OrbitControls autoRotate autoRotateSpeed={0}/>
       </Canvas>
 
