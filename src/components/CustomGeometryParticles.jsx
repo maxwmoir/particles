@@ -17,9 +17,9 @@ const CustomGeometryParticles = (props) => {
   
       if (shape === "box") {
         for (let i = 0; i < count; i++) {
-          let x = (Math.random() - 0.5) * 10;
-          let y = (Math.random() - 0.5) * 10;
-          let z = (Math.random() - 0.5) * 10;
+          let x = (Math.random() - 0.5) * 15;
+          let y = (Math.random() - 0.5) * 15;
+          let z = (Math.random() - 0.5) * 15;
   
           positions.set([x, y, z], i * 3);
         }
