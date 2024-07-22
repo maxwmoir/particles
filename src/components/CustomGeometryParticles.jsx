@@ -5,7 +5,7 @@ import "../App.css"
 
 
 const CustomGeometryParticles = (props) => {
-    const { count, shape } = props;
+    const { count, shape, color } = props;
 
     // Gives direct access to points
     const points = useRef();
@@ -90,7 +90,7 @@ const CustomGeometryParticles = (props) => {
             itemSize={3}
           />
         </bufferGeometry>
-        <pointsMaterial size={.05} color="purple" sizeAttenuation depthWrite={false} />
+        <pointsMaterial size={.05} color={color} sizeAttenuation depthWrite={false} />
       </points>
     );
   };

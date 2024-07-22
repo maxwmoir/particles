@@ -22,23 +22,21 @@ const Scene = () => {
     zIndex:+1
   }
   const [shape, setShape] = useState("pool");
+  const [color, setColor] = useState("purple");
+
   const [open, setOpen] = useState(false);
 
   const toggleDrawer = (newOpen) => () => {
     setOpen(newOpen);
   };
 
-  const handleChange = (event) => {
+  const handleShapeChange = (event) => {
     setShape(event.target.value);
   };
 
-  function handleClick() {
-    if (shape == "sphere") {
-      setShape("box");
-    } else {
-      setShape("sphere");
-    }
-  }
+  const handleColorChange = (event) => {
+    setColor(event.target.value);
+  };
 
 
   return (
@@ -53,12 +51,12 @@ const Scene = () => {
           </Box>
           
           <Drawer open={open} onClose={toggleDrawer(false)}>
-            <ControlUI shape = {shape} handleClick={handleClick} handleChange = {handleChange}/>
+            <ControlUI shape = {shape} color = {color} handleColorChange = {handleColorChange} handleShapeChange = {handleShapeChange}/>
           </Drawer>
 
           <Canvas className="canv" camera={{ position: [20, 15, 30] } }>
             <ambientLight intensity={0.5}/>
-            <CustomGeometryParticles count={100000} shape={shape}/>
+            <CustomGeometryParticles color = {color} count={100000} shape={shape}/>
             <OrbitControls autoRotate autoRotateSpeed={0.5}/>
           </Canvas>
         </Box>

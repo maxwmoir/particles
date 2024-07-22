@@ -1,14 +1,12 @@
 import { Box, Slider, Divider } from "@mui/material"
 import Card from '@mui/material/Card';
-import Chip from '@mui/material/Chip';
-import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
-function ControlUI({shape, handleClick, handleChange}){
+function ControlUI({shape, color, handleColorChange, handleShapeChange}){
 
 
     return (
@@ -28,6 +26,8 @@ function ControlUI({shape, handleClick, handleChange}){
 
             
             <Box sx={{ minWidth: 120, p : 2 }}>
+
+                {/* Shape Change Accordion */}
                 <Typography color="grey" variant="body2">
                     Select your shape here!
                 </Typography>
@@ -38,8 +38,8 @@ function ControlUI({shape, handleClick, handleChange}){
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
                     value={shape}
-                    label="Age"
-                    onChange={handleChange}
+                    label="Shape"
+                    onChange={handleShapeChange}
                     >
                     <MenuItem value={"pool"}>Wave Pool</MenuItem>
                     <MenuItem value={"box"}>Box</MenuItem>
@@ -47,6 +47,26 @@ function ControlUI({shape, handleClick, handleChange}){
                     </Select>
                 </FormControl>
                 
+                <br /><br />
+
+                {/* Color Change Accordion */}
+                <FormControl fullWidth>
+                    <InputLabel id="demo-simple-select-label">Color</InputLabel>
+                    <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={color}
+                    label = "Color"
+                    onChange={handleColorChange}
+                    >
+                    <MenuItem value={"purple"}>Purple</MenuItem>
+                    <MenuItem value={"red"}>Red</MenuItem>
+                    <MenuItem value={"blue"}>Blue</MenuItem>
+                    <MenuItem value={"green"}>Green</MenuItem>
+                    <MenuItem value={"yellow"}>Yellow</MenuItem>
+
+                    </Select>
+                </FormControl>
 
             </Box>
         </Card>
