@@ -1,4 +1,4 @@
-import { Box, Slider, Divider } from "@mui/material"
+import { Box, Slider } from "@mui/material"
 import Card from '@mui/material/Card';
 import Typography from '@mui/material/Typography';
 import InputLabel from '@mui/material/InputLabel';
@@ -6,7 +6,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
-
+// Control UI for inside drawer
 function ControlUI(props){
     return (
         <Card  square variant="outlined" sx={{ maxWidth: 360, color : '#171614', height : '100%', backgroundColor : '#121212' }}>
@@ -92,6 +92,7 @@ function ControlUI(props){
 
                 </Box>
                 <br />
+                {/* TODO: Implement attribute changes - e.g. radius / wavelength sliders. */}
                 {/* <Box 
                     sx = {{
                         width : "100%",

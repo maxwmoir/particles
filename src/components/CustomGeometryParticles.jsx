@@ -1,4 +1,4 @@
-import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import useFrame from "@react-three/fiber";
 import { useMemo, useRef } from "react";
 import * as THREE from "three";
 import "../App.css"
@@ -14,7 +14,9 @@ const CustomGeometryParticles = (props) => {
     // Generates the positions attributes array
     const particlesPosition = useMemo(() => {
       const positions = new Float32Array(count * 3);
-  
+
+
+      // Initial position of the particles depending on shape type
       if (shape === "box") {
         for (let i = 0; i < count; i++) {
           let x = (Math.random() - 0.5) * 15;
@@ -63,6 +65,9 @@ const CustomGeometryParticles = (props) => {
       return positions;
     }, [count, shape]);
   
+    // Frame loop, updates all particles each frame for dynamic graphs
+    // TODO: Implement shaders instead of manually updating position of every particle.
+    //       -Will massively improve performance
     useFrame((state) => {
       const { clock } = state;
 
@@ -72,7 +77,6 @@ const CustomGeometryParticles = (props) => {
           let x = points.current.geometry.attributes.position.array[i3]
           let z = points.current.geometry.attributes.position.array[i3 + 2]
           let y = points.current.geometry.attributes.position.array[i3 + 1]
-          let theta = Math.atan(y / x)
     
           points.current.geometry.attributes.position.array[i3 + 1] = (Math.cos(x) + Math.sin(z)) + Math.sin(clock.elapsedTime + x + z) * 0.5
     
@@ -80,6 +84,7 @@ const CustomGeometryParticles = (props) => {
 
           }
       }
+
       if (shape == "start"){
         for (let i = 0; i < count; i++) {
           const i3 = i * 3;
@@ -92,12 +97,11 @@ const CustomGeometryParticles = (props) => {
         }
       }
 
-
-
       points.current.geometry.attributes.position.needsUpdate = true;
 
     });
   
+    // Return points 
     return (
       <points ref={points}>
         <bufferGeometry>
