@@ -21,7 +21,7 @@ const Scene = () => {
 
   // Hooks to keep track of attributes
   const [shape, setShape] = useState("pool");
-  const [color, setColor] = useState("purple");
+  const [color, setColor] = useState("red");
   const [open, setOpen] = useState(false);
   const [speed, setSpeed] = useState(20); 
   const [radius, setRadius] = useState(20); 
