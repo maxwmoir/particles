@@ -25,8 +25,12 @@ const CustomGeometryParticles = (props) => {
         }
       }
   
-      if (shape === "pool") {
-        const distance = radius;
+      if (shape === "pool" || shape == "start") {
+        let distance = radius;
+        if (shape == "start"){
+          distance *= 1.5;
+        }
+
        
         for (let i = 0; i < count; i++) {
           const theta = THREE.MathUtils.randFloatSpread(360); 
@@ -74,10 +78,23 @@ const CustomGeometryParticles = (props) => {
     
           
 
-        }
+          }
+      }
+      if (shape == "start"){
+        for (let i = 0; i < count; i++) {
+          const i3 = i * 3;
+          let x = points.current.geometry.attributes.position.array[i3]
+          let z = points.current.geometry.attributes.position.array[i3 + 2]
+          points.current.geometry.attributes.position.array[i3] *= 1.01 -  Math.sqrt((x)**2 + (z)**2) / 999
+          points.current.geometry.attributes.position.array[i3 + 1] = (Math.cos(x) + Math.sin(z)) + Math.sin(clock.elapsedTime + x + z) - 10* Math.sin(Math.sqrt(x**2 + z**2))
+          points.current.geometry.attributes.position.array[i3 + 2] *= 1.003- Math.sqrt((x)**2 + (z)**2) / 2000
     
-    }
-    points.current.geometry.attributes.position.needsUpdate = true;
+        }
+      }
+
+
+
+      points.current.geometry.attributes.position.needsUpdate = true;
 
     });
   
