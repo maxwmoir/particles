@@ -92,7 +92,7 @@ function ControlUI(props){
 
                 </Box>
                 <br />
-                <Box 
+                {/* <Box 
                     sx = {{
                         width : "100%",
                         height : 300,
@@ -102,15 +102,42 @@ function ControlUI(props){
                         boxShadow : 10,
                     }}
                 >
-                    <Typography color="#979899" variant="body2">
-                        Attribute Control
-                    </Typography>
+
                     
+                    <Typography color="#979899" variant="body1">
+                        Attribute Controls
+                    </Typography>
 
                                     
 
+                    <Slider
+                            size="small"
+                            defaultValue={70}
+                            aria-label="Small"
+                            valueLabelDisplay="auto"
+                            value = {props.radius}
+                            onChange={props.handleRadiusChange}
+                        />
 
-                </Box>
+                        <Slider
+                            size="small"
+                            defaultValue={70}
+                            aria-label="Small"
+                            valueLabelDisplay="auto"
+                            value = {props.speed}
+                            onChange={props.handleSpeedChange}
+                        />
+
+                        <Slider
+                            size="small"
+                            defaultValue={70}
+                            aria-label="Small"
+                            valueLabelDisplay="auto"
+                            value = {props.speed}
+                            onChange={props.handleSpeedChange}
+                        />
+    
+                </Box> */}
             </Box>
 
             

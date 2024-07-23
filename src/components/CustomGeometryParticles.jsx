@@ -5,7 +5,7 @@ import "../App.css"
 
 
 const CustomGeometryParticles = (props) => {
-    const { count, shape, color } = props;
+    const { count, shape, color, radius } = props;
 
     // Gives direct access to points
     const points = useRef();
@@ -26,12 +26,13 @@ const CustomGeometryParticles = (props) => {
       }
   
       if (shape === "pool") {
-        const distance = 20;
+        const distance = radius;
        
         for (let i = 0; i < count; i++) {
           const theta = THREE.MathUtils.randFloatSpread(360); 
           const phi = THREE.MathUtils.randFloatSpread(360); 
-  
+          
+          console.log(radius);
           let x = distance * Math.cos(theta) * Math.sin(phi); 
           let y = distance * Math.sin(theta) * Math.sin(phi);
           let z = distance * Math.cos(phi) ;
@@ -41,7 +42,7 @@ const CustomGeometryParticles = (props) => {
       }
 
       if (shape == "sphere"){
-        const distance = 10;
+        const distance = radius / 2;
        
         for (let i = 0; i < count; i++) {
           const theta = THREE.MathUtils.randFloatSpread(360); 

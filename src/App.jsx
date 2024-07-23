@@ -24,6 +24,7 @@ const Scene = () => {
   const [color, setColor] = useState("purple");
   const [open, setOpen] = useState(false);
   const [speed, setSpeed] = useState(20); 
+  const [radius, setRadius] = useState(20); 
 
 
   // Handle extracting attributes from forms
@@ -43,6 +44,10 @@ const Scene = () => {
     setSpeed(newValue);
   };
 
+  const handleRadiusChange = (event, newValue) => {
+    setRadius(newValue);
+  };
+
   return (
     <ThemeProvider theme={darkTheme}>
       <CssBaseline />
@@ -59,6 +64,8 @@ const Scene = () => {
               shape = {shape} 
               color = {color} 
               speed = {speed}
+              radius = {radius}
+              handleRadiusChange = {handleRadiusChange}
               handleSpeedChange = {handleSpeedChange}
               handleColorChange = {handleColorChange} 
               handleShapeChange = {handleShapeChange}
@@ -68,8 +75,8 @@ const Scene = () => {
           {/* React Three Fiber Canvas */}
           <Canvas className="canv" camera={{ position: [20, 15, 30] } }>
             <ambientLight intensity={0.5}/>
-            <CustomGeometryParticles color = {color} count={100000} shape={shape}/>
-            <OrbitControls autoRotate minDistance={5}  maxDistance = {250} autoRotateSpeed={speed / 30}/>
+            <CustomGeometryParticles color = {color} radius = {radius} count={100000} shape={shape}/>
+            <OrbitControls autoRotate minDistance={5} maxDistance = {250} autoRotateSpeed={speed / 30}/>
           </Canvas>
 
         </Box>
