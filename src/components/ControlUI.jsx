@@ -9,7 +9,15 @@ import Select from '@mui/material/Select';
 // Control UI for inside drawer
 function ControlUI(props){
     return (
-        <Card  square variant="outlined" sx={{ maxWidth: 360, color : '#171614', height : '100%', backgroundColor : '#121212' }}>
+        <Card square variant="outlined" 
+            sx={{ 
+                maxWidth: 360, 
+                color : '#171614', 
+                height : '100%', 
+                backgroundColor : '#1212scroll12',
+                overflowY : "auto",
+            }}
+        >
             <Box sx={{ p: 2 }}>
                 <Box width = {"95%"} color = {"white"}>
                     <Typography color={"white"} gutterBottom variant="h5" component="div">
@@ -19,7 +27,7 @@ function ControlUI(props){
                 <Typography color="grey" variant="body2">
                 Adjust the settings to change the properties of the plotted graph.
                 Use your mouse to zoom in or pan the shape.
-                The current shape is a {props.shape}!
+                The current shape is a {props.state.shape}!
                 </Typography>
             </Box>
             
@@ -42,9 +50,9 @@ function ControlUI(props){
                         <Select
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
-                        value={props.shape}
+                        value={props.state.shape}
                         label="Shape"
-                        onChange={props.handleShapeChange}
+                        onChange={props.attributes.handleChange('shape')}
                         >
                         <MenuItem value={"pool"}>Wave Pool</MenuItem>
                         <MenuItem value={"box"}>Box</MenuItem>
@@ -60,9 +68,9 @@ function ControlUI(props){
                         <Select
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
-                        value={props.color}
+                        value={props.attributes.color}
                         label = "Color"
-                        onChange={props.handleColorChange}
+                        onChange={props.attributes.handleColorChange}
                         >
                         <MenuItem value={"purple"}>Purple</MenuItem>
                         <MenuItem value={"red"}>Red</MenuItem>
@@ -85,15 +93,15 @@ function ControlUI(props){
                             defaultValue={70}
                             aria-label="Small"
                             valueLabelDisplay="auto"
-                            value = {props.speed}
-                            onChange={props.handleSpeedChange}
+                            value = {props.attributes.speed}
+                            onChange={props.attributes.handleSpeedChange}
                         />
                     </Box>
 
                 </Box>
                 <br />
                 {/* TODO: Implement attribute changes - e.g. radius / wavelength sliders. */}
-                {/* <Box 
+                <Box 
                     sx = {{
                         width : "100%",
                         height : 300,
@@ -105,40 +113,51 @@ function ControlUI(props){
                 >
 
                     
-                    <Typography color="#979899" variant="body1">
+                    <Typography color="#bababa" variant="body1">
                         Attribute Controls
                     </Typography>
-
-                                    
-
+                    <br></br>
+                    <Typography color="#979899" variant="subtitle2">
+                            Auto Rotate Speed
+                    </Typography>
                     <Slider
                             size="small"
                             defaultValue={70}
                             aria-label="Small"
                             valueLabelDisplay="auto"
-                            value = {props.radius}
-                            onChange={props.handleRadiusChange}
+                            value = {props.attributes.radius}
+                            onChange={props.attributes.handleRadiusChange}
                         />
 
-                        <Slider
-                            size="small"
-                            defaultValue={70}
-                            aria-label="Small"
-                            valueLabelDisplay="auto"
-                            value = {props.speed}
-                            onChange={props.handleSpeedChange}
-                        />
-
-                        <Slider
-                            size="small"
-                            defaultValue={70}
-                            aria-label="Small"
-                            valueLabelDisplay="auto"
-                            value = {props.speed}
-                            onChange={props.handleSpeedChange}
-                        />
+                    <Typography color="#979899" variant="subtitle2">
+                            Radius
+                    </Typography>
+                    <Slider
+                        size="small"
+                        defaultValue={70}
+                        aria-label="Small"
+                        valueLabelDisplay="auto"
+                        value = {props.attributes.speed}
+                        onChange={props.attributes.handleSpeedChange}
+                    />
+                    
+                    <Typography color="#979899" variant="subtitle2">
+                            Wavelenght
+                    </Typography>
+                    <Slider
+                        size="small"
+                        defaultValue={70}
+                        aria-label="Small"
+                        valueLabelDisplay="auto"
+                        value = {props.attributes.speed}
+                        onChange={props.attributes.handleSpeedChange}
+                    />
+   
     
-                </Box> */}
+                        
+                        
+
+                </Box>
             </Box>
 
             

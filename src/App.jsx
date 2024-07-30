@@ -1,5 +1,5 @@
 import { OrbitControls } from "@react-three/drei";
-import { Canvas } from "@react-three/fiber";
+import { Canvas, events } from "@react-three/fiber";
 import { useState } from "react";
 import "./App.css"
 import Box from '@mui/material/Box';
@@ -21,15 +21,22 @@ const Scene = () => {
 
   // Hooks to keep track of attributes
   const [shape, setShape] = useState("pool");
-  const [color, setColor] = useState("red");
+  const [color, setColor] = useState("purple");
   const [open, setOpen] = useState(false);
   const [speed, setSpeed] = useState(20); 
   const [radius, setRadius] = useState(20); 
-
+  const [state, setState] = useState({shape:"pool", color:"purple"})
 
   // Handle extracting attributes from forms
   const toggleDrawer = (newOpen) => () => {
     setOpen(newOpen);
+  };
+
+  const handleChange = (fieldName) => (event) => {
+    setState ((prevState) =>({
+      ...prevState,
+      [fieldName] : event.target.value,
+    }));
   };
 
   const handleShapeChange = (event) => {
@@ -48,6 +55,18 @@ const Scene = () => {
     setRadius(newValue);
   };
 
+  const shapeAttributes = {
+    shape : shape,
+    color : color,
+    speed : speed,
+    radius: radius,
+    handleRadiusChange: handleRadiusChange,
+    handleSpeedChange : handleSpeedChange,
+    handleColorChange : handleColorChange,
+    handleShapeChange : handleShapeChange,
+    handleChange : handleChange
+  }
+
   return (
     <ThemeProvider theme={darkTheme}>
       <CssBaseline />
@@ -59,17 +78,10 @@ const Scene = () => {
           </Box>
           
           {/* Settings Drawer */}
-          <Drawer open={open} onClose={toggleDrawer(false)}>
-            <ControlUI 
-              shape = {shape} 
-              color = {color} 
-              speed = {speed}
-              radius = {radius}
-              handleRadiusChange = {handleRadiusChange}
-              handleSpeedChange = {handleSpeedChange}
-              handleColorChange = {handleColorChange} 
-              handleShapeChange = {handleShapeChange}
-            />
+          <Drawer open ={open} onClose={toggleDrawer(false)}
+                  sx = {{ maxHeight : "100vh"}}
+          >
+            <ControlUI state = {state} attributes = {shapeAttributes}/>
           </Drawer>
 
           {/* React Three Fiber Canvas */}
