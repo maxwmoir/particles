@@ -20,52 +20,33 @@ const darkTheme = createTheme({
 const Scene = () => {
 
   // Hooks to keep track of attributes
-  const [shape, setShape] = useState("pool");
-  const [color, setColor] = useState("purple");
   const [open, setOpen] = useState(false);
-  const [speed, setSpeed] = useState(20); 
-  const [radius, setRadius] = useState(20); 
-  const [state, setState] = useState({shape:"pool", color:"purple"})
+  const [state, setState] = useState({
+    shape:"start",
+    color:"#008fdb", 
+    speed : 0,
+    radius: 20,
+    amplitude : 50,
+    wavelength : 50,
+  });
 
-  // Handle extracting attributes from forms
+  // Controls settings Drawer visibility
   const toggleDrawer = (newOpen) => () => {
     setOpen(newOpen);
   };
 
-  const handleChange = (fieldName) => (event) => {
+  // Handle extracting attributes from forms
+  const handleChange = (fieldName) => (event, newValue = null) => {
+    if (newValue == null){
+      newValue = event.target.value;
+    }
     setState ((prevState) =>({
       ...prevState,
       [fieldName] : event.target.value,
     }));
   };
 
-  const handleShapeChange = (event) => {
-    setShape(event.target.value);
-  };
 
-  const handleColorChange = (event) => {
-    setColor(event.target.value);
-  };
-
-  const handleSpeedChange = (event, newValue) => {
-    setSpeed(newValue);
-  };
-
-  const handleRadiusChange = (event, newValue) => {
-    setRadius(newValue);
-  };
-
-  const shapeAttributes = {
-    shape : shape,
-    color : color,
-    speed : speed,
-    radius: radius,
-    handleRadiusChange: handleRadiusChange,
-    handleSpeedChange : handleSpeedChange,
-    handleColorChange : handleColorChange,
-    handleShapeChange : handleShapeChange,
-    handleChange : handleChange
-  }
 
   return (
     <ThemeProvider theme={darkTheme}>
@@ -74,21 +55,22 @@ const Scene = () => {
           
           {/* Settings button */}
           <Box sx = {{position : "fixed", zIndex : 1}} width="100%" >
-            <Button color="secondary" onClick={toggleDrawer(true)}> Settings </Button>
+            <Button color="primary" onClick={toggleDrawer(true)}> Settings </Button>
           </Box>
           
           {/* Settings Drawer */}
           <Drawer open ={open} onClose={toggleDrawer(false)}
                   sx = {{ maxHeight : "100vh"}}
           >
-            <ControlUI state = {state} attributes = {shapeAttributes}/>
+            <ControlUI state = {state} handleChange = {handleChange} />
           </Drawer>
 
           {/* React Three Fiber Canvas */}
           <Canvas className="canv" camera={{ position: [20, 15, 30] } }>
             <ambientLight intensity={0.5}/>
-            <CustomGeometryParticles color = {color} radius = {radius} count={100000} shape={shape}/>
-            <OrbitControls autoRotate minDistance={5} maxDistance = {250} autoRotateSpeed={speed / 30}/>
+            {/* Here state.shape is passed to reload the canvas to compute the new state */}
+            <CustomGeometryParticles state = {state} count={100000} shape={state.shape}/> 
+            <OrbitControls autoRotate minDistance={5} maxDistance = {250} autoRotateSpeed={state.speed / 30}/>
           </Canvas>
 
         </Box>

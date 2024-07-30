@@ -5,6 +5,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import AttributeControlPanel from "./AttributeControlPanel";
 
 // Control UI for inside drawer
 function ControlUI(props){
@@ -14,7 +15,7 @@ function ControlUI(props){
                 maxWidth: 360, 
                 color : '#171614', 
                 height : '100%', 
-                backgroundColor : '#1212scroll12',
+                backgroundColor : '#121212',
                 overflowY : "auto",
             }}
         >
@@ -52,7 +53,7 @@ function ControlUI(props){
                         id="demo-simple-select"
                         value={props.state.shape}
                         label="Shape"
-                        onChange={props.attributes.handleChange('shape')}
+                        onChange={props.handleChange('shape')}
                         >
                         <MenuItem value={"pool"}>Wave Pool</MenuItem>
                         <MenuItem value={"box"}>Box</MenuItem>
@@ -68,9 +69,9 @@ function ControlUI(props){
                         <Select
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
-                        value={props.attributes.color}
+                        value={props.state.color}
                         label = "Color"
-                        onChange={props.attributes.handleColorChange}
+                        onChange={props.handleChange('color')}
                         >
                         <MenuItem value={"purple"}>Purple</MenuItem>
                         <MenuItem value={"red"}>Red</MenuItem>
@@ -93,76 +94,20 @@ function ControlUI(props){
                             defaultValue={70}
                             aria-label="Small"
                             valueLabelDisplay="auto"
-                            value = {props.attributes.speed}
-                            onChange={props.attributes.handleSpeedChange}
+                            value = {props.state.speed}
+                            onChange={props.handleChange('speed')}
                         />
                     </Box>
 
                 </Box>
                 <br />
                 {/* TODO: Implement attribute changes - e.g. radius / wavelength sliders. */}
-                <Box 
-                    sx = {{
-                        width : "100%",
-                        height : 300,
-                        borderRadius : 1,
-                        bgcolor : '#1f1f1f',
-                        p : 2,
-                        boxShadow : 10,
-                    }}
-                >
-
-                    
-                    <Typography color="#bababa" variant="body1">
-                        Attribute Controls
-                    </Typography>
-                    <br></br>
-                    <Typography color="#979899" variant="subtitle2">
-                            Auto Rotate Speed
-                    </Typography>
-                    <Slider
-                            size="small"
-                            defaultValue={70}
-                            aria-label="Small"
-                            valueLabelDisplay="auto"
-                            value = {props.attributes.radius}
-                            onChange={props.attributes.handleRadiusChange}
-                        />
-
-                    <Typography color="#979899" variant="subtitle2">
-                            Radius
-                    </Typography>
-                    <Slider
-                        size="small"
-                        defaultValue={70}
-                        aria-label="Small"
-                        valueLabelDisplay="auto"
-                        value = {props.attributes.speed}
-                        onChange={props.attributes.handleSpeedChange}
-                    />
-                    
-                    <Typography color="#979899" variant="subtitle2">
-                            Wavelenght
-                    </Typography>
-                    <Slider
-                        size="small"
-                        defaultValue={70}
-                        aria-label="Small"
-                        valueLabelDisplay="auto"
-                        value = {props.attributes.speed}
-                        onChange={props.attributes.handleSpeedChange}
-                    />
-   
-    
-                        
-                        
-
-                </Box>
+                {/* <AttributeControlPanel {...props} /> */}
             </Box>
 
             
         </Card>
     )
-}
+};
 
-export default ControlUI
+export default ControlUI;

@@ -5,7 +5,7 @@ import "../App.css"
 
 
 const CustomGeometryParticles = (props) => {
-    const { count, shape, color, radius } = props;
+    const { count, shape } = props;
 
     // Gives direct access to points
     const points = useRef();
@@ -28,26 +28,25 @@ const CustomGeometryParticles = (props) => {
       }
   
       if (shape === "pool" || shape == "start") {
-        let distance = radius;
+        let distance = 20;
         if (shape == "start"){
           distance *= 1.5;
         }
 
        
         for (let i = 0; i < count; i++) {
-          const theta = THREE.MathUtils.randFloatSpread(360); 
           const phi = THREE.MathUtils.randFloatSpread(360); 
           
-          let x = distance * Math.cos(theta) * Math.sin(phi); 
-          let y = distance * Math.sin(theta) * Math.sin(phi);
-          let z = distance * Math.cos(phi) ;
-  
+          let x = distance * Math.sin(phi) + Math.random() * 15; 
+          let z = distance * Math.cos(phi) + Math.random() * 15;
+          let y = 0;
+
           positions.set([x, y, z], i * 3);
         }
       }
 
       if (shape == "sphere"){
-        const distance = radius / 2;
+        const distance = 10;
        
         for (let i = 0; i < count; i++) {
           const theta = THREE.MathUtils.randFloatSpread(360); 
@@ -69,7 +68,6 @@ const CustomGeometryParticles = (props) => {
     //       -Will massively improve performance
     useFrame((state) => {
       const { clock } = state;
-
       if (shape == "pool"){
         for (let i = 0; i < count; i++) {
           const i3 = i * 3;
@@ -77,7 +75,7 @@ const CustomGeometryParticles = (props) => {
           let z = points.current.geometry.attributes.position.array[i3 + 2]
           let y = points.current.geometry.attributes.position.array[i3 + 1]
     
-          points.current.geometry.attributes.position.array[i3 + 1] = (Math.cos(x) + Math.sin(z)) + Math.sin(clock.elapsedTime + x + z) * 0.5
+          points.current.geometry.attributes.position.array[i3 + 1] =  props.state.amplitude * 0.1 * Math.sin(clock.elapsedTime + x * props.state.wavelength / 100) * 0.5
     
           
 
@@ -89,9 +87,9 @@ const CustomGeometryParticles = (props) => {
           const i3 = i * 3;
           let x = points.current.geometry.attributes.position.array[i3]
           let z = points.current.geometry.attributes.position.array[i3 + 2]
-          points.current.geometry.attributes.position.array[i3] *= 1.01 -  Math.sqrt((x)**2 + (z)**2) / 999
-          points.current.geometry.attributes.position.array[i3 + 1] = (Math.cos(x) + Math.sin(z)) + Math.sin(clock.elapsedTime + x + z) - 10* Math.sin(Math.sqrt(x**2 + z**2))
-          points.current.geometry.attributes.position.array[i3 + 2] *= 1.003- Math.sqrt((x)**2 + (z)**2) / 2000
+          points.current.geometry.attributes.position.array[i3] *= 1.01 -  Math.sqrt((x)**2 + (z)**2) / 1000
+          points.current.geometry.attributes.position.array[i3 + 1] = 2 * (Math.cos(x) + Math.sin(z)) + Math.sin(clock.elapsedTime * 2 + x + z) - 5 * Math.sin(Math.sqrt(x**2 + z**2))
+          points.current.geometry.attributes.position.array[i3 + 2] *= 1.01 -  Math.sqrt((x)**2 + (z)**2) / 1000
     
         }
       }
@@ -111,7 +109,7 @@ const CustomGeometryParticles = (props) => {
             itemSize={3}
           />
         </bufferGeometry>
-        <pointsMaterial size={.05} color={color} sizeAttenuation depthWrite={false} />
+        <pointsMaterial size={.05} color={props.state.color} sizeAttenuation depthWrite={false} />
       </points>
     );
   };
