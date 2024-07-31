@@ -30,12 +30,7 @@ function ControlUI(props){
                 </Box>
                 <Typography color="grey" variant="body2">
                 Adjust the settings to change the properties of the plotted graph.
-                Use your mouse to zoom in or pan the shape.
-                </Typography>
-
-                <br />
-
-                <Typography color="grey" variant="body2">
+                Use your mouse to zoom in and out or rotate the shape.
                 This project was made by Max Moir, check out the source code <a href="https://github.com/maxwmoir/particles">here</a>.
                 </Typography>
                 
