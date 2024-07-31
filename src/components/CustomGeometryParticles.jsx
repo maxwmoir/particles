@@ -32,24 +32,6 @@ const CustomGeometryParticles = (props) => {
           positions.set([x, y, z], i * 3);
         }
       }
-
-
-
-      if (shape == "sphere"){
-        const distance = 10;
-       
-        for (let i = 0; i < count; i++) {
-          // const theta = THREE.MathUtils.randFloatSpread(360); 
-          const theta = i*Math.PI/10000;
-          const phi = i; 
-  
-          let x = distance * Math.cos(theta) * Math.sin(phi); 
-          let y = distance * Math.sin(theta) * Math.sin(phi);
-          let z = distance * Math.cos(phi) ;
-  
-          positions.set([x, y, z], i * 3);
-        }
-      }
   
       return positions;
     }, [count, shape]);
@@ -72,7 +54,6 @@ const CustomGeometryParticles = (props) => {
             points.current.geometry.attributes.position.array[i3 + 2] = z;
     
           }
-          console.log(props.state.updateState);
         }
         
         if (shape === "pool" ) {
@@ -101,6 +82,28 @@ const CustomGeometryParticles = (props) => {
             points.current.geometry.attributes.position.array[i3 + 2] = z;
           }
         }
+
+        if (shape == "sphere"){
+          const distance = props.state.sphererad;
+         
+          for (let i = 0; i < count; i++) {
+            // const theta = THREE.MathUtils.randFloatSpread(360); 
+            let f = props.state.spheresty;
+            const theta = i*Math.PI/(1000 * 1/2 *(f / 20)**2);
+            const phi = i; 
+            let i3 = i * 3;
+    
+            let x = distance * Math.cos(theta) * Math.sin(phi); 
+            let y = distance * Math.sin(theta) * Math.sin(phi);
+            let z = distance * Math.cos(phi) ;
+    
+            points.current.geometry.attributes.position.array[i3] = x;
+            points.current.geometry.attributes.position.array[i3 + 1] = y;
+            points.current.geometry.attributes.position.array[i3 + 2] = z;
+          }
+        }
+
+
         updateShape = "false";
       }
 

@@ -32,6 +32,8 @@ const Scene = () => {
     boxwidth : 20,
     boxheight : 20,
     boxdepth : 20,
+    sphererad : 20,
+    spheresty : 100
   });
 
 

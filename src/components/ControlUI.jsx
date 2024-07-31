@@ -7,6 +7,8 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import WavepoolControl from "./WavePoolControl";
 import BoxControl from "./BoxControl";
+import SphereControl from "./SphereControl";
+
 
 // Control UI for inside drawer
 function ControlUI(props){
@@ -85,6 +87,7 @@ function ControlUI(props){
                         <MenuItem value={"blue"}>Blue</MenuItem>
                         <MenuItem value={"green"}>Green</MenuItem>
                         <MenuItem value={"yellow"}>Yellow</MenuItem>
+                        <MenuItem value={"white"}>White</MenuItem>
 
                         </Select>
                     </FormControl>
@@ -114,6 +117,9 @@ function ControlUI(props){
                 }
                 { props.state.shape == "box" &&
                     <BoxControl {...props} />
+                }
+                { props.state.shape == "sphere" &&
+                    <SphereControl {...props} />
                 }
             </Box>
 
