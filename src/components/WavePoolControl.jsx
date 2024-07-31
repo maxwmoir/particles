@@ -6,7 +6,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
-function AttributeControlPanel(props){
+function WavepoolControl(props){
 
     return (
         <Box 
@@ -21,7 +21,7 @@ function AttributeControlPanel(props){
 
             
             <Typography color="#bababa" variant="body1">
-                Attribute Controls
+                Wave Pool Attribute Controls
             </Typography>
 
             <br></br>
@@ -73,4 +73,4 @@ function AttributeControlPanel(props){
     );
 };
 
-export default AttributeControlPanel;
+export default WavepoolControl;

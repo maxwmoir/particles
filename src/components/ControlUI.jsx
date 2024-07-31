@@ -5,7 +5,8 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import AttributeControlPanel from "./AttributeControlPanel";
+import WavepoolControl from "./WavePoolControl";
+import BoxControl from "./BoxControl";
 
 // Control UI for inside drawer
 function ControlUI(props){
@@ -102,7 +103,12 @@ function ControlUI(props){
                 </Box>
                 <br />
                 {/* TODO: Implement attribute changes - e.g. radius / wavelength sliders. */}
-                {/* <AttributeControlPanel {...props} /> */}
+                { props.state.shape == "pool" &&
+                    <WavepoolControl {...props} />
+                }
+                { props.state.shape == "box" &&
+                    <BoxControl {...props} />
+                }
             </Box>
 
             

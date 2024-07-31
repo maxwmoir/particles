@@ -24,11 +24,18 @@ const Scene = () => {
   const [state, setState] = useState({
     shape:"start",
     color:"#008fdb", 
-    speed : 0,
+    speed : 20,
     radius: 20,
     amplitude : 50,
-    wavelength : 50,
+    frequency : 50,
+    wavedir : 'polar',
+    boxwidth : 20,
+    boxheight : 20,
+    boxdepth : 20,
+    updateState : "true"
   });
+
+  const fieldsThatCauseUpdates = ["boxheight", "boxwidth", "boxdepth" ];
 
   // Controls settings Drawer visibility
   const toggleDrawer = (newOpen) => () => {
@@ -37,13 +44,18 @@ const Scene = () => {
 
   // Handle extracting attributes from forms
   const handleChange = (fieldName) => (event, newValue = null) => {
-    if (newValue == null){
+    if (fieldName != 'updateState'){
       newValue = event.target.value;
     }
+    
     setState ((prevState) =>({
       ...prevState,
-      [fieldName] : event.target.value,
+      [fieldName] : newValue
     }));
+
+    if (fieldsThatCauseUpdates.includes(fieldName)) {
+      handleChange('updateState')(null, "true");
+    }
   };
 
 
@@ -69,7 +81,7 @@ const Scene = () => {
           <Canvas className="canv" camera={{ position: [20, 15, 30] } }>
             <ambientLight intensity={0.5}/>
             {/* Here state.shape is passed to reload the canvas to compute the new state */}
-            <CustomGeometryParticles state = {state} count={100000} shape={state.shape}/> 
+            <CustomGeometryParticles state = {state} count={25000} handleChange = {handleChange}  shape={state.shape}/> 
             <OrbitControls autoRotate minDistance={5} maxDistance = {250} autoRotateSpeed={state.speed / 30}/>
           </Canvas>
 
