@@ -29,8 +29,14 @@ function ControlUI(props){
                 <Typography color="grey" variant="body2">
                 Adjust the settings to change the properties of the plotted graph.
                 Use your mouse to zoom in or pan the shape.
-                The current shape is a {props.state.shape}!
                 </Typography>
+
+                <br />
+
+                <Typography color="grey" variant="body2">
+                This project was made by Max Moir, check out the source code <a href="https://github.com/maxwmoir/particles">here</a>.
+                </Typography>
+                
             </Box>
             
             <Box sx={{ minWidth: 120, p : 2}}>

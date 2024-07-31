@@ -69,6 +69,20 @@ function WavepoolControl(props){
                 value = {props.state.frequency}
                 onChange={props.handleChange('frequency')}
             />
+
+            <Typography color="#979899" variant="subtitle2">
+                    Radius
+            </Typography>
+            <Slider
+                size="small"
+                defaultValue={70}
+                aria-label="Small"
+                valueLabelDisplay="auto"
+                min = {1}
+                max = {50}
+                value = {props.state.radius}
+                onChange={props.handleChange('radius')}
+            />
         </Box>
     );
 };

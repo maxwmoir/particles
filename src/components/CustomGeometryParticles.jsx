@@ -5,7 +5,9 @@ import "../App.css"
 
 
 const CustomGeometryParticles = (props) => {
-    const { count, shape, handleChange } = props;
+    const { count } = props;
+    const shape = props.state.shape;
+    let updateShape = "true";
 
     // Gives direct access to points
     const points = useRef();
@@ -17,15 +19,6 @@ const CustomGeometryParticles = (props) => {
 
 
       // Initial position of the particles depending on shape type
-      if (shape === "box") {
-        for (let i = 0; i < count; i++) {
-          let x = (Math.random() - 0.5) * 15;
-          let y = (Math.random() - 0.5) * 15;
-          let z = (Math.random() - 0.5) * 15;
-  
-          positions.set([x, y, z], i * 3);
-        }
-      }
 
       if (shape == "start") {
         for (let i = 0; i < count; i++) {
@@ -42,37 +35,13 @@ const CustomGeometryParticles = (props) => {
 
 
 
-  
-      if (shape === "pool" ) {
-        let alpha = 2;
-        let b = Math.round(alpha * Math.sqrt(count))
-        let phi = (Math.sqrt(5)+1)/2;
-        let n = count;
-        for (let k = 0; k < count; k++) {
-          let r = 0;
-
-          if (k > n - b){
-            r = 25;
-          } else {
-            r = Math.sqrt(k-1/2) * 25/Math.sqrt(n-(b+1)/2);
-          }
-          
-          let theta = 2*Math.PI*k/phi^2;
-
-          let x = r * Math.cos(theta)
-          let z = r * Math.sin(theta)
-          let y = 0;
-
-          positions.set([x, y, z], k * 3);
-        }
-      }
-
       if (shape == "sphere"){
         const distance = 10;
        
         for (let i = 0; i < count; i++) {
-          const theta = THREE.MathUtils.randFloatSpread(360); 
-          const phi = THREE.MathUtils.randFloatSpread(360); 
+          // const theta = THREE.MathUtils.randFloatSpread(360); 
+          const theta = i*Math.PI/10000;
+          const phi = i; 
   
           let x = distance * Math.cos(theta) * Math.sin(phi); 
           let y = distance * Math.sin(theta) * Math.sin(phi);
@@ -90,6 +59,52 @@ const CustomGeometryParticles = (props) => {
     //       -Will massively improve performance
     useFrame((state) => {
       const { clock } = state;
+
+      if (updateShape == "true") {
+        if (shape === "box") {
+          for (let i = 0; i < count; i++) {
+            const i3 = i * 3;
+            let x = (Math.random() - 0.5) * props.state.boxwidth;
+            let y = (Math.random() - 0.5) * props.state.boxheight;
+            let z = (Math.random() - 0.5) * props.state.boxdepth;
+            points.current.geometry.attributes.position.array[i3] = x;
+            points.current.geometry.attributes.position.array[i3 + 1] = y;
+            points.current.geometry.attributes.position.array[i3 + 2] = z;
+    
+          }
+          console.log(props.state.updateState);
+        }
+        
+        if (shape === "pool" ) {
+          let alpha = 2;
+          let b = Math.round(alpha * Math.sqrt(count))
+          let phi = (Math.sqrt(5)+1)/2;
+          let n = count;
+          for (let k = 0; k < count; k++) {
+            let i3 = k * 3;
+            let r = 0;
+  
+            if (k > n - b){
+              r = 25;
+            } else {
+              r = Math.sqrt(k-1/2) * 25/Math.sqrt(n-(b+1)/2);
+            }
+            r *= props.state.radius / 25;
+            let theta = 2*Math.PI*k/phi^2;
+  
+            let x = r * Math.cos(theta)
+            let z = r * Math.sin(theta)
+            let y = 0;
+  
+            points.current.geometry.attributes.position.array[i3] = x;
+            points.current.geometry.attributes.position.array[i3 + 1] = y;
+            points.current.geometry.attributes.position.array[i3 + 2] = z;
+          }
+        }
+        updateShape = "false";
+      }
+
+
       if (shape == "pool"){
         for (let i = 0; i < count; i++) {
           const i3 = i * 3;
@@ -117,20 +132,10 @@ const CustomGeometryParticles = (props) => {
         }
       }
 
-      if (shape === "box" && props.state.updateState == "true") {
-        for (let i = 0; i < count; i++) {
-          const i3 = i * 3;
-          let x = (Math.random() - 0.5) * props.state.boxwidth;
-          let y = (Math.random() - 0.5) * props.state.boxheight;
-          let z = (Math.random() - 0.5) * props.state.boxdepth;
-          points.current.geometry.attributes.position.array[i3] = x;
-          points.current.geometry.attributes.position.array[i3 + 1] = y;
-          points.current.geometry.attributes.position.array[i3 + 2] = z;
-  
-        }
-        handleChange('updateState')("false");
 
-      }
+      
+
+
 
       points.current.geometry.attributes.position.needsUpdate = true;
 

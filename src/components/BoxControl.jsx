@@ -1,10 +1,6 @@
 import { Box, Slider } from "@mui/material"
-import Card from '@mui/material/Card';
 import Typography from '@mui/material/Typography';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
+
 
 function BoxControl(props){
 
