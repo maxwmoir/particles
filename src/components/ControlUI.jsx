@@ -79,7 +79,7 @@ function ControlUI(props){
                         >
                         <MenuItem value={"purple"}>Purple</MenuItem>
                         <MenuItem value={"red"}>Red</MenuItem>
-                        <MenuItem value={"blue"}>Blue</MenuItem>
+                        <MenuItem value={"#008fdb"}>Blue</MenuItem>
                         <MenuItem value={"green"}>Green</MenuItem>
                         <MenuItem value={"yellow"}>Yellow</MenuItem>
                         <MenuItem value={"white"}>White</MenuItem>
