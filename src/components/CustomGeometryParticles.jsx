@@ -14,8 +14,9 @@ const CustomGeometryParticles = (props) => {
   
   
     // Generates the positions attributes array
-    const particlesPosition = useMemo(() => {
+    const [particlesPosition, particlesColor] = useMemo(() => {
       const positions = new Float32Array(count * 3);
+      const colors = new Float32Array(count * 3);
 
 
       // Initial position of the particles depending on shape type
@@ -29,11 +30,12 @@ const CustomGeometryParticles = (props) => {
           let z = Math.cos(phi) * 15 / r;
           let y = 0;
 
+          colors.set([1, 0, 0], i * 3);
           positions.set([x, y, z], i * 3);
         }
       }
   
-      return positions;
+      return [positions, colors];
     }, [count, shape]);
   
     // Frame loop, updates all particles each frame for dynamic graphs
@@ -53,6 +55,12 @@ const CustomGeometryParticles = (props) => {
             points.current.geometry.attributes.position.array[i3 + 1] = y;
             points.current.geometry.attributes.position.array[i3 + 2] = z;
     
+
+            if (z >= 5) {
+              points.current.geometry.attributes.color.array[i3] = 1;
+            } else {
+              points.current.geometry.attributes.color.array[i3] = 10;
+            }
           }
         }
         
@@ -96,6 +104,8 @@ const CustomGeometryParticles = (props) => {
             let x = distance * Math.cos(theta) * Math.sin(phi); 
             let y = distance * Math.sin(theta) * Math.sin(phi);
             let z = distance * Math.cos(phi) ;
+
+
     
             points.current.geometry.attributes.position.array[i3] = x;
             points.current.geometry.attributes.position.array[i3 + 1] = y;
@@ -131,10 +141,12 @@ const CustomGeometryParticles = (props) => {
           points.current.geometry.attributes.position.array[i3] *= 1.01 -  Math.sqrt((x)**2 + (z)**2) / 1500
           points.current.geometry.attributes.position.array[i3 + 1] = 2 * (Math.cos(x) + Math.sin(z)) + Math.sin(clock.elapsedTime * 2 + x + z) - 5 * Math.sin(Math.sqrt(x**2 + z**2))
           points.current.geometry.attributes.position.array[i3 + 2] *= 1.01 -  Math.sqrt((x)**2 + (z)**2) / 1500
-    
+          points.current.geometry.attributes.color.array[i3] = 1;
+
         }
       }
-
+       
+      
 
       
 
@@ -154,8 +166,10 @@ const CustomGeometryParticles = (props) => {
             array={particlesPosition}
             itemSize={3}
           />
+        <bufferAttribute usage={THREE.DynamicDrawUsage} attach="attributes-color" args={[particlesColor, 3]} />
+
         </bufferGeometry>
-        <pointsMaterial size={.1} color={props.state.color} sizeAttenuation depthWrite={false} />
+        <pointsMaterial size={.1} vertexColors sizeAttenuation depthWrite={false} />
       </points>
     );
   };
