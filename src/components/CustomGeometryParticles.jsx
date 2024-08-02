@@ -8,6 +8,7 @@ const CustomGeometryParticles = (props) => {
     const { count } = props;
     const shape = props.state.shape;
     let updateShape = "true";
+    let singleColor = true;
 
     // Gives direct access to points
     const points = useRef();
@@ -30,7 +31,6 @@ const CustomGeometryParticles = (props) => {
           let z = Math.cos(phi) * 15 / r;
           let y = 0;
 
-          colors.set([1, 0, 0], i * 3);
           positions.set([x, y, z], i * 3);
         }
       }
@@ -56,11 +56,7 @@ const CustomGeometryParticles = (props) => {
             points.current.geometry.attributes.position.array[i3 + 2] = z;
     
 
-            if (z >= 5) {
-              points.current.geometry.attributes.color.array[i3] = 1;
-            } else {
-              points.current.geometry.attributes.color.array[i3] = 10;
-            }
+  
           }
         }
         
@@ -141,7 +137,7 @@ const CustomGeometryParticles = (props) => {
           points.current.geometry.attributes.position.array[i3] *= 1.01 -  Math.sqrt((x)**2 + (z)**2) / 1500
           points.current.geometry.attributes.position.array[i3 + 1] = 2 * (Math.cos(x) + Math.sin(z)) + Math.sin(clock.elapsedTime * 2 + x + z) - 5 * Math.sin(Math.sqrt(x**2 + z**2))
           points.current.geometry.attributes.position.array[i3 + 2] *= 1.01 -  Math.sqrt((x)**2 + (z)**2) / 1500
-          points.current.geometry.attributes.color.array[i3] = 1;
+
 
         }
       }
@@ -169,7 +165,11 @@ const CustomGeometryParticles = (props) => {
         <bufferAttribute usage={THREE.DynamicDrawUsage} attach="attributes-color" args={[particlesColor, 3]} />
 
         </bufferGeometry>
-        <pointsMaterial size={.1} vertexColors sizeAttenuation depthWrite={false} />
+        { singleColor == false &&
+                <pointsMaterial size={.1} vertexColors sizeAttenuation depthWrite={false} />
+        }
+        { singleColor == true &&
+                <pointsMaterial size={.1} color={props.state.color} sizeAttenuation depthWrite={false} />        }
       </points>
     );
   };
