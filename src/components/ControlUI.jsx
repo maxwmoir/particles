@@ -5,9 +5,10 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import WavepoolControl from "./WavePoolControl";
-import BoxControl from "./BoxControl";
-import SphereControl from "./SphereControl";
+import WavepoolControl from "./ControlPanels/WavePoolControl";
+import BoxControl from "./ControlPanels/BoxControl";
+import SphereControl from "./ControlPanels/SphereControl";
+import LinearSysControls from "./ControlPanels/LinearSysControls";
 
 
 // Control UI for inside drawer
@@ -70,26 +71,31 @@ function ControlUI(props){
                     <br /><br />
 
                     {/* Color Change Accordion */}
-                    <FormControl fullWidth>
-                        <InputLabel id="demo-simple-select-label">Color</InputLabel>
-                        <Select
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
-                        value={props.state.color}
-                        label = "Color"
-                        onChange={props.handleChange('color')}
-                        >
-                        <MenuItem value={"purple"}>Purple</MenuItem>
-                        <MenuItem value={"red"}>Red</MenuItem>
-                        <MenuItem value={"#008fdb"}>Blue</MenuItem>
-                        <MenuItem value={"green"}>Green</MenuItem>
-                        <MenuItem value={"yellow"}>Yellow</MenuItem>
-                        <MenuItem value={"white"}>White</MenuItem>
+                    { props.state.shape != "lin" &&
+                        <div>
+                            <FormControl fullWidth>
+                            <InputLabel id="demo-simple-select-label">Color</InputLabel>
+                            <Select
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            value={props.state.color}
+                            label = "Color"
+                            onChange={props.handleChange('color')}
+                            >
+                            <MenuItem value={"purple"}>Purple</MenuItem>
+                            <MenuItem value={"red"}>Red</MenuItem>
+                            <MenuItem value={"#008fdb"}>Blue</MenuItem>
+                            <MenuItem value={"green"}>Green</MenuItem>
+                            <MenuItem value={"yellow"}>Yellow</MenuItem>
+                            <MenuItem value={"white"}>White</MenuItem>
 
-                        </Select>
-                    </FormControl>
+                            </Select>
+                            </FormControl>
+                            <br /> <br />
+                        </div>
+                    }
 
-                    <br /> <br />
+
                     
 
                     <Box sx={{ width: "95%"}}>
@@ -117,6 +123,9 @@ function ControlUI(props){
                 }
                 { props.state.shape == "sphere" &&
                     <SphereControl {...props} />
+                }
+                { props.state.shape == "lin" &&
+                    <LinearSysControls {...props} />
                 }
             </Box>
 

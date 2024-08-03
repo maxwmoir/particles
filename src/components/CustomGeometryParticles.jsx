@@ -2,14 +2,15 @@ import { useFrame } from "@react-three/fiber";
 import { useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 import "../App.css"
-
+import { matrix } from "mathjs";
 
 const CustomGeometryParticles = (props) => {
-    const { count, updateShape, handleChange } = props;
+    const { count, handleChange } = props;
     const shape = props.state.shape;
     const [singleColor, setSingleColor] = useState(true);
-    console.log("here")
+    let updateCheck = true;
 
+    let mat = matrix([[1, 2], [1/0, 1]]);
 
     // Gives direct access to points
     const points = useRef();
@@ -32,7 +33,6 @@ const CustomGeometryParticles = (props) => {
           let z = Math.cos(phi) * 15 / r;
           let y = 0;
 
-          colors.set([0, 0, 1], i * 3);
 
           positions.set([x, y, z], i * 3);
         }
@@ -47,7 +47,8 @@ const CustomGeometryParticles = (props) => {
     useFrame((state) => {
       const { clock } = state;
 
-      if (props.state.updateShape == true) {
+
+      if (props.state.updateShape == true && updateCheck) {
         if (shape === "box") {
           for (let i = 0; i < count; i++) {
             const i3 = i * 3;
@@ -111,22 +112,33 @@ const CustomGeometryParticles = (props) => {
         }
 
         if (shape === "lin") {
+          setSingleColor(false);
+          const n = mat.size()[0]
+          console.log(mat.get([0, 0]));
+
           for (let i = 0; i < count; i++) {
-
             const i3 = i * 3;
-            let x = (Math.random() - 0.5) * props.state.boxwidth;
-            let y = (Math.random() - 0.5) * props.state.boxheight;
-            let z = (Math.random() - 0.5) * props.state.boxdepth;
-            points.current.geometry.attributes.position.array[i3] = x;
-            points.current.geometry.attributes.position.array[i3 + 1] = y;
-            points.current.geometry.attributes.position.array[i3 + 2] = z;
-            setSingleColor(false);
+            let x = (Math.random() - 0.5) * props.state.boxwidth * 50;
+            let y = (Math.random() - 0.5) * props.state.boxheight * 50;
+            let z = (Math.random() - 0.5) * props.state.boxdepth * 50;
+            let eq = i % n;
+            
 
+            if (eq == 1) {
+              points.current.geometry.attributes.color.array[i3 + 2] = 1;
+            } else {
+              points.current.geometry.attributes.color.array[i3 + 1] = 1;
+            }
+
+            points.current.geometry.attributes.position.array[i3] = x;
+            points.current.geometry.attributes.position.array[i3 + 1] = mat.get([eq, 0]) * x + mat.get([eq, 1]) * z;
+            points.current.geometry.attributes.position.array[i3 + 2] = z;
           } 
         } else {
           setSingleColor(true);
         }
-        console.log(props.state.updateShape);
+
+        updateCheck = false;
         handleChange("updateShape")(null, false);
       }
 
@@ -160,11 +172,6 @@ const CustomGeometryParticles = (props) => {
       }
        
       
-
-      
-
-
-
       points.current.geometry.attributes.position.needsUpdate = true;
 
     });
@@ -186,7 +193,7 @@ const CustomGeometryParticles = (props) => {
 
         </bufferGeometry>
         { singleColor == false &&
-                <pointsMaterial size={.1} vertexColors sizeAttenuation depthWrite={false} />
+                <pointsMaterial size={3} vertexColors sizeAttenuation depthWrite={true} />
         }
         { singleColor == true &&
                 <pointsMaterial size={.075} color={props.state.color} sizeAttenuation depthWrite={false} />        
