@@ -5,10 +5,10 @@ import "../App.css"
 
 
 const CustomGeometryParticles = (props) => {
-    const { count } = props;
+    const { count, updateShape, handleChange } = props;
     const shape = props.state.shape;
-    let updateShape = "true";
     const [singleColor, setSingleColor] = useState(true);
+    console.log("here")
 
 
     // Gives direct access to points
@@ -47,7 +47,7 @@ const CustomGeometryParticles = (props) => {
     useFrame((state) => {
       const { clock } = state;
 
-      if (updateShape == "true") {
+      if (props.state.updateShape == true) {
         if (shape === "box") {
           for (let i = 0; i < count; i++) {
             const i3 = i * 3;
@@ -126,8 +126,8 @@ const CustomGeometryParticles = (props) => {
         } else {
           setSingleColor(true);
         }
-
-        updateShape = "false";
+        console.log(props.state.updateShape);
+        handleChange("updateShape")(null, false);
       }
 
 
