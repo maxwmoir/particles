@@ -4,6 +4,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import TextField from '@mui/material/TextField';
 
 function LinearSysControls(props){
 
@@ -44,16 +45,18 @@ function LinearSysControls(props){
             <Typography color="#979899" variant="subtitle2">
                     Amplitude
             </Typography>
-            <Slider
-                size="small"
-                defaultValue={70}
-                aria-label="Small"
-                valueLabelDisplay="auto"
-                min = {-100}
-                max = {100}
-                value = {props.state.amplitude}
-                onChange={props.handleChange('amplitude')}
+            <TextField
+                id="filled-number"
+                type="number"
+                InputLabelProps={{
+                    shrink: true,
+                }}
+                sx = {{
+                    width : "100px",
+                }}
+                variant="filled"
             />
+            
             
             <Typography color="#979899" variant="subtitle2">
                     Frequency
