@@ -20,7 +20,6 @@ const darkTheme = createTheme({
 const Scene = () => {
 
   // Hooks to keep track of attributes
-  const [open, setOpen] = useState(false);
   const [state, setState] = useState({
     shape:"start",
     color:"#008fdb", 
@@ -35,6 +34,7 @@ const Scene = () => {
     sphererad : 20,
     spheresty : 100
   });
+  const [open, setOpen] = useState(false);
 
 
   // Controls settings Drawer visibility
@@ -71,7 +71,7 @@ const Scene = () => {
           </Drawer>
 
           {/* React Three Fiber Canvas */}
-          <Canvas className="canv" camera={{ position: [20, 15, 30] } }>
+          <Canvas dpr={window.devicePixelRatio * 2} className="canv" camera={{ position: [20, 15, 30] } }>
             <ambientLight intensity={0.5}/>
             <CustomGeometryParticles state = {state} count={25000} handleChange = {handleChange}/> 
             <OrbitControls autoRotate minDistance={5} maxDistance = {250} autoRotateSpeed={state.speed / 30}/>
