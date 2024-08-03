@@ -1,5 +1,5 @@
 import { useFrame } from "@react-three/fiber";
-import { useMemo, useRef } from "react";
+import { useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 import "../App.css"
 
@@ -8,7 +8,8 @@ const CustomGeometryParticles = (props) => {
     const { count } = props;
     const shape = props.state.shape;
     let updateShape = "true";
-    let singleColor = true;
+    const [singleColor, setSingleColor] = useState(true);
+
 
     // Gives direct access to points
     const points = useRef();
@@ -30,6 +31,8 @@ const CustomGeometryParticles = (props) => {
           let x = Math.sin(phi) * 15 / r; 
           let z = Math.cos(phi) * 15 / r;
           let y = 0;
+
+          colors.set([0, 0, 1], i * 3);
 
           positions.set([x, y, z], i * 3);
         }
@@ -54,8 +57,6 @@ const CustomGeometryParticles = (props) => {
             points.current.geometry.attributes.position.array[i3] = x;
             points.current.geometry.attributes.position.array[i3 + 1] = y;
             points.current.geometry.attributes.position.array[i3 + 2] = z;
-    
-
   
           }
         }
@@ -109,6 +110,22 @@ const CustomGeometryParticles = (props) => {
           }
         }
 
+        if (shape === "lin") {
+          for (let i = 0; i < count; i++) {
+
+            const i3 = i * 3;
+            let x = (Math.random() - 0.5) * props.state.boxwidth;
+            let y = (Math.random() - 0.5) * props.state.boxheight;
+            let z = (Math.random() - 0.5) * props.state.boxdepth;
+            points.current.geometry.attributes.position.array[i3] = x;
+            points.current.geometry.attributes.position.array[i3 + 1] = y;
+            points.current.geometry.attributes.position.array[i3 + 2] = z;
+            setSingleColor(false);
+
+          } 
+        } else {
+          setSingleColor(true);
+        }
 
         updateShape = "false";
       }
@@ -161,15 +178,19 @@ const CustomGeometryParticles = (props) => {
             count={particlesPosition.length / 3}
             array={particlesPosition}
             itemSize={3}
-          />
-        <bufferAttribute usage={THREE.DynamicDrawUsage} attach="attributes-color" args={[particlesColor, 3]} />
+        />
+        
+        { !singleColor &&
+          <bufferAttribute usage={THREE.DynamicDrawUsage} attach="attributes-color" args={[particlesColor, 3]} />
+        }
 
         </bufferGeometry>
         { singleColor == false &&
                 <pointsMaterial size={.1} vertexColors sizeAttenuation depthWrite={false} />
         }
         { singleColor == true &&
-                <pointsMaterial size={.1} color={props.state.color} sizeAttenuation depthWrite={false} />        }
+                <pointsMaterial size={.075} color={props.state.color} sizeAttenuation depthWrite={false} />        
+        }
       </points>
     );
   };

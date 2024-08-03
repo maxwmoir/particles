@@ -62,6 +62,8 @@ function ControlUI(props){
                         <MenuItem value={"pool"}>Wave Pool</MenuItem>
                         <MenuItem value={"box"}>Box</MenuItem>
                         <MenuItem value={"sphere"}>Sphere</MenuItem>
+                        <MenuItem value={"lin"}>System of Equations</MenuItem>
+
                         </Select>
                     </FormControl>
                     
