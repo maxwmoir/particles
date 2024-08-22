@@ -85,7 +85,7 @@ const Scene = () => {
             <ambientLight intensity={0.5}/>
             <CustomGeometryParticles state = {state} count={25000} handleChange = {handleChange}/> 
             { state.shape == "lin" && 
-              <OrbitControls autoRotate minDistance={250} maxDistance = {500} autoRotateSpeed={state.speed / 30}/>
+              <OrbitControls autoRotate minDistance={250} maxDistance = {450} autoRotateSpeed={state.speed / 30}/>
             }
             { state.shape != "lin" &&
               <OrbitControls autoRotate minDistance={5} maxDistance = {250} autoRotateSpeed={state.speed / 30}/>

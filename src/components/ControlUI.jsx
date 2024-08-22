@@ -60,10 +60,11 @@ function ControlUI(props){
                         label="Shape"
                         onChange={props.handleChange('shape')}
                         >
+                        <MenuItem value={"start"}>Starting Animation</MenuItem>
                         <MenuItem value={"pool"}>Wave Pool</MenuItem>
                         <MenuItem value={"box"}>Box</MenuItem>
                         <MenuItem value={"sphere"}>Sphere</MenuItem>
-                        <MenuItem value={"lin"}>System of Equations</MenuItem>
+                        {/* <MenuItem value={"lin"}>System of Equations</MenuItem> */}
 
                         </Select>
                     </FormControl>
@@ -124,9 +125,9 @@ function ControlUI(props){
                 { props.state.shape == "sphere" &&
                     <SphereControl {...props} />
                 }
-                { props.state.shape == "lin" &&
+                {/* { props.state.shape == "lin" &&
                     <LinearSysControls {...props} />
-                }
+                } */}
             </Box>
 
             

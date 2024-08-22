@@ -2,7 +2,7 @@ import { useFrame } from "@react-three/fiber";
 import { useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 import "../App.css"
-import { matrix } from "mathjs";
+import { matrix, lusolve } from "mathjs";
 
 const CustomGeometryParticles = (props) => {
     const { count, handleChange } = props;
@@ -10,8 +10,11 @@ const CustomGeometryParticles = (props) => {
     const [singleColor, setSingleColor] = useState(true);
     let updateCheck = true;
 
-    let mat = matrix([[1, 2], [1/0, 1]]);
+    let mat = matrix([[1, 0, 0], [0, 1, 0], [0, 0, 1]]);
+    let b   = [0, 0, 0];
+    const solution = lusolve(mat, b);
 
+    console.log(solution)
     // Gives direct access to points
     const points = useRef();
   
@@ -118,22 +121,33 @@ const CustomGeometryParticles = (props) => {
 
           for (let i = 0; i < count; i++) {
             const i3 = i * 3;
-            let x = (Math.random() - 0.5) * props.state.boxwidth * 50;
-            let y = (Math.random() - 0.5) * props.state.boxheight * 50;
-            let z = (Math.random() - 0.5) * props.state.boxdepth * 50;
+            let x = (Math.random() - 0.5) * props.state.boxwidth  * 50;
+            let z = (Math.random() - 0.5) * props.state.boxdepth  * 50;
             let eq = i % n;
             
 
-            if (eq == 1) {
-              points.current.geometry.attributes.color.array[i3 + 2] = 1;
-            } else {
-              points.current.geometry.attributes.color.array[i3 + 1] = 1;
+            let colList = {
+              0 : [0, 0, 1],
+              1 : [0, 1, 0],
+              2 : [1, 0, 0]
             }
 
+            let y = mat.get([eq, 0]) * x + mat.get([eq, 1]) * z - b[eq];
+
             points.current.geometry.attributes.position.array[i3] = x;
-            points.current.geometry.attributes.position.array[i3 + 1] = mat.get([eq, 0]) * x + mat.get([eq, 1]) * z;
+            points.current.geometry.attributes.position.array[i3 + 1] = y;
             points.current.geometry.attributes.position.array[i3 + 2] = z;
+
+            points.current.geometry.attributes.color.array.set(colList[eq], i3);
+          
+          }
+          for (let i = 0; i < 20; i ++){
+
           } 
+          points.current.geometry.attributes.position.array.set([0, 0, 0], 0);
+          points.current.geometry.attributes.color.array.set([1, 0, 0], 0);
+
+
         } else {
           setSingleColor(true);
         }
@@ -193,7 +207,7 @@ const CustomGeometryParticles = (props) => {
 
         </bufferGeometry>
         { singleColor == false &&
-                <pointsMaterial size={3} vertexColors sizeAttenuation depthWrite={true} />
+                <pointsMaterial size={2} vertexColors sizeAttenuation depthWrite={true} />
         }
         { singleColor == true &&
                 <pointsMaterial size={.075} color={props.state.color} sizeAttenuation depthWrite={false} />        
