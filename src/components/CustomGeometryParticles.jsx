@@ -1,21 +1,28 @@
 import { useFrame } from "@react-three/fiber";
-import { useMemo, useRef } from "react";
+import { useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 import "../App.css"
-
+import { matrix, lusolve } from "mathjs";
 
 const CustomGeometryParticles = (props) => {
-    const { count } = props;
+    const { count, handleChange } = props;
     const shape = props.state.shape;
-    let updateShape = "true";
+    const [singleColor, setSingleColor] = useState(true);
+    let updateCheck = true;
 
+    let mat = matrix([[1, 0, 0], [0, 1, 0], [0, 0, 1]]);
+    let b   = [0, 0, 0];
+    const solution = lusolve(mat, b);
+
+    console.log(solution)
     // Gives direct access to points
     const points = useRef();
   
   
     // Generates the positions attributes array
-    const particlesPosition = useMemo(() => {
+    const [particlesPosition, particlesColor] = useMemo(() => {
       const positions = new Float32Array(count * 3);
+      const colors = new Float32Array(count * 3);
 
 
       // Initial position of the particles depending on shape type
@@ -29,11 +36,12 @@ const CustomGeometryParticles = (props) => {
           let z = Math.cos(phi) * 15 / r;
           let y = 0;
 
+
           positions.set([x, y, z], i * 3);
         }
       }
   
-      return positions;
+      return [positions, colors];
     }, [count, shape]);
   
     // Frame loop, updates all particles each frame for dynamic graphs
@@ -42,7 +50,8 @@ const CustomGeometryParticles = (props) => {
     useFrame((state) => {
       const { clock } = state;
 
-      if (updateShape == "true") {
+
+      if (props.state.updateShape == true && updateCheck) {
         if (shape === "box") {
           for (let i = 0; i < count; i++) {
             const i3 = i * 3;
@@ -52,7 +61,7 @@ const CustomGeometryParticles = (props) => {
             points.current.geometry.attributes.position.array[i3] = x;
             points.current.geometry.attributes.position.array[i3 + 1] = y;
             points.current.geometry.attributes.position.array[i3 + 2] = z;
-    
+  
           }
         }
         
@@ -96,6 +105,8 @@ const CustomGeometryParticles = (props) => {
             let x = distance * Math.cos(theta) * Math.sin(phi); 
             let y = distance * Math.sin(theta) * Math.sin(phi);
             let z = distance * Math.cos(phi) ;
+
+
     
             points.current.geometry.attributes.position.array[i3] = x;
             points.current.geometry.attributes.position.array[i3 + 1] = y;
@@ -103,8 +114,46 @@ const CustomGeometryParticles = (props) => {
           }
         }
 
+        if (shape === "lin") {
+          setSingleColor(false);
+          const n = mat.size()[0]
+          console.log(mat.get([0, 0]));
 
-        updateShape = "false";
+          for (let i = 0; i < count; i++) {
+            const i3 = i * 3;
+            let x = (Math.random() - 0.5) * props.state.boxwidth  * 50;
+            let z = (Math.random() - 0.5) * props.state.boxdepth  * 50;
+            let eq = i % n;
+            
+
+            let colList = {
+              0 : [0, 0, 1],
+              1 : [0, 1, 0],
+              2 : [1, 0, 0]
+            }
+
+            let y = mat.get([eq, 0]) * x + mat.get([eq, 1]) * z - b[eq];
+
+            points.current.geometry.attributes.position.array[i3] = x;
+            points.current.geometry.attributes.position.array[i3 + 1] = y;
+            points.current.geometry.attributes.position.array[i3 + 2] = z;
+
+            points.current.geometry.attributes.color.array.set(colList[eq], i3);
+          
+          }
+          for (let i = 0; i < 20; i ++){
+
+          } 
+          points.current.geometry.attributes.position.array.set([0, 0, 0], 0);
+          points.current.geometry.attributes.color.array.set([1, 0, 0], 0);
+
+
+        } else {
+          setSingleColor(true);
+        }
+
+        updateCheck = false;
+        handleChange("updateShape")(null, false);
       }
 
 
@@ -131,15 +180,12 @@ const CustomGeometryParticles = (props) => {
           points.current.geometry.attributes.position.array[i3] *= 1.01 -  Math.sqrt((x)**2 + (z)**2) / 1500
           points.current.geometry.attributes.position.array[i3 + 1] = 2 * (Math.cos(x) + Math.sin(z)) + Math.sin(clock.elapsedTime * 2 + x + z) - 5 * Math.sin(Math.sqrt(x**2 + z**2))
           points.current.geometry.attributes.position.array[i3 + 2] *= 1.01 -  Math.sqrt((x)**2 + (z)**2) / 1500
-    
+
+
         }
       }
-
-
+       
       
-
-
-
       points.current.geometry.attributes.position.needsUpdate = true;
 
     });
@@ -153,9 +199,19 @@ const CustomGeometryParticles = (props) => {
             count={particlesPosition.length / 3}
             array={particlesPosition}
             itemSize={3}
-          />
+        />
+        
+        { !singleColor &&
+          <bufferAttribute usage={THREE.DynamicDrawUsage} attach="attributes-color" args={[particlesColor, 3]} />
+        }
+
         </bufferGeometry>
-        <pointsMaterial size={.1} color={props.state.color} sizeAttenuation depthWrite={false} />
+        { singleColor == false &&
+                <pointsMaterial size={2} vertexColors sizeAttenuation depthWrite={true} />
+        }
+        { singleColor == true &&
+                <pointsMaterial size={.075} color={props.state.color} sizeAttenuation depthWrite={false} />        
+        }
       </points>
     );
   };

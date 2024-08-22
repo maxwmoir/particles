@@ -32,7 +32,8 @@ const Scene = () => {
     boxheight : 20,
     boxdepth : 20,
     sphererad : 20,
-    spheresty : 100
+    spheresty : 100,
+    updateShape : true
   });
   const [open, setOpen] = useState(false);
 
@@ -44,11 +45,17 @@ const Scene = () => {
 
   // Handle extracting attributes from forms
   const handleChange = (fieldName) => (event, newValue = null) => {
-    newValue = event.target.value;
+    if (event != null){
+      newValue = event.target.value;
+    }
     setState ((prevState) =>({
       ...prevState,
       [fieldName] : newValue
     }));
+
+    if (fieldName != "updateShape"){
+      handleChange("updateShape")(null, true);
+    }
   };
 
 
@@ -64,17 +71,25 @@ const Scene = () => {
           </Box>
           
           {/* Settings Drawer */}
-          <Drawer open ={open} onClose={toggleDrawer(false)}
-                  sx = {{ maxHeight : "100vh"}}
-          >
-            <ControlUI state = {state} handleChange = {handleChange} />
-          </Drawer>
+          <div>
+            <Drawer open ={open} onClose={toggleDrawer(false)}
+                    sx = {{ maxHeight : "100vh"}}
+            >
+              <ControlUI state = {state} handleChange = {handleChange} />
+            </Drawer>
+          </div>
+          
 
           {/* React Three Fiber Canvas */}
           <Canvas dpr={window.devicePixelRatio * 2} className="canv" camera={{ position: [20, 15, 30] } }>
             <ambientLight intensity={0.5}/>
             <CustomGeometryParticles state = {state} count={25000} handleChange = {handleChange}/> 
-            <OrbitControls autoRotate minDistance={5} maxDistance = {250} autoRotateSpeed={state.speed / 30}/>
+            { state.shape == "lin" && 
+              <OrbitControls autoRotate minDistance={250} maxDistance = {450} autoRotateSpeed={state.speed / 30}/>
+            }
+            { state.shape != "lin" &&
+              <OrbitControls autoRotate minDistance={5} maxDistance = {250} autoRotateSpeed={state.speed / 30}/>
+            }
           </Canvas>
 
         </Box>
