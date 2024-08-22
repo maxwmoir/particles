@@ -20,7 +20,6 @@ const darkTheme = createTheme({
 const Scene = () => {
 
   // Hooks to keep track of attributes
-  const [open, setOpen] = useState(false);
   const [state, setState] = useState({
     shape:"start",
     color:"#008fdb", 
@@ -36,6 +35,7 @@ const Scene = () => {
     spheresty : 100,
     updateShape : true
   });
+  const [open, setOpen] = useState(false);
 
 
   // Controls settings Drawer visibility
