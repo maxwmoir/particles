@@ -17,4 +17,3 @@ Then you can try the project for yourself by running:
 npm run dev
 ```
 
-test
